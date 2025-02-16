@@ -8,6 +8,10 @@ const SummaryApi = {
     login: {
         url: "/api/user/login",
         method: "POST",
+    },
+    forgot_password: {
+        url: "/api/user/forgot-password",
+        method: "PUT",
     }
 }
 
