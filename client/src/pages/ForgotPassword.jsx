@@ -42,10 +42,13 @@ const ForgotPassword = () => {
 
             if (response.data.success) {
                 toast.success(response.data.message)
+                navigate("/verification-otp", {
+                    state: data
+                })
                 setData({
                     email: "",
                 })
-                navigate("/verification-otp")
+
             }
 
         } catch (error) {
