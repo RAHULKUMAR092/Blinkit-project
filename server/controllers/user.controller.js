@@ -137,6 +137,9 @@ export async function loginController(request, response) {
     }
     const accesstoken = await generatedAccessToken(user._id);
     const refreshToken = await generatedRefreshToken(user._id);
+    const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+      last_login_date: new Date(),
+    });
     const cookiesOption = {
       httpOnly: true,
       secure: true,
@@ -325,6 +328,11 @@ export async function verifyForgotPasswordOtpController(request, response) {
     }
     // if otp is not expired
     // opt === user.forgot_password_opt
+    const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+      forgot_password_otp: "",
+      forgot_password_expiry: "",
+    });
+
     return response.status(200).json({
       message: "verify otp successfully",
       error: false,
@@ -428,6 +436,29 @@ export async function refreshTokenController(request, response) {
   } catch (error) {
     return response.status(500).json({
       message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
+
+// grt login user details
+
+export async function userDetails(request, response) {
+  try {
+    const userId = request.userId;
+    const user = await UserModel.findById(userId).select(
+      " -password -refresh_token"
+    );
+    return response.json({
+      message: "User details fetched successfully",
+      data: user,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: "Something is wrong",
       error: true,
       success: false,
     });
