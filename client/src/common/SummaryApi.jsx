@@ -48,6 +48,10 @@ const SummaryApi = {
     uploadImage: {
         url: "/api/file/upload",
         method: "POST"
+    },
+    getCategory: {
+        url: "/api/category/get",
+        method: "GET"
     }
 }
 
