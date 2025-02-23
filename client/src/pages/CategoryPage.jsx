@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import UploadCategoryModel from '../components/UploadCategoryModel'
 import Loading from '../components/Loading'
 import NoData from '../components/NoData'
+import Axios from '../utils/Axios'
+import SummaryApi from '../common/SummaryApi'
 
 const CategoryPage = () => {
     const [openUploadCategory, setOpenUploadCategory] = useState(false)
@@ -10,6 +12,13 @@ const CategoryPage = () => {
     const fetchCategory = async () => {
         try {
             setLoading(true)
+            const response = await Axios({
+                ...SummaryApi.getCategory
+            })
+            const { data: responseData } = response
+            if (responseData.success) {
+                setCategoryData(responseData.data)
+            }
         } catch (error) {
         } finally {
             setLoading(false)
@@ -32,6 +41,22 @@ const CategoryPage = () => {
                 )
             }
 
+            <div className='p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2'>
+                {
+                    categoryData.map((category, index) => {
+                        return (
+                            <div className='w-32 h-48 rounded shadow-md'>
+                                <img
+                                    alt={category.name}
+                                    src={category.image}
+                                    className='w-full object-scale-down'
+                                />
+                            </div>
+                        )
+                    })
+                }
+            </div>
+
             {
                 loading && (
                     <Loading />
@@ -41,7 +66,7 @@ const CategoryPage = () => {
 
             {
                 openUploadCategory && (
-                    <UploadCategoryModel close={() => setOpenUploadCategory(false)} />
+                    <UploadCategoryModel fetchData={fetchCategory} close={() => setOpenUploadCategory(false)} />
                 )
             }
         </section>
