@@ -7,7 +7,7 @@ import SummaryApi from '../common/SummaryApi';
 import AxiosToastError from '../utils/AxiosToastError';
 import toast from 'react-hot-toast';
 import { setUserDetails } from '../store/userSlice';
-import { fetchUserDetails } from '../utils/fetchUserDetails';
+import fetchUserDetails from '../utils/fetchUserDetails';
 
 
 const Profile = () => {
