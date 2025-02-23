@@ -1,6 +1,7 @@
 import CategoryModel from "../models/category.model.js";
 import SubCategoryModel from "../models/subCategory.model.js";
 import ProductModel from "../models/product.model.js";
+import { request, response } from "express";
 
 export const AddCategoryController = async (request, response) => {
   try {
@@ -34,6 +35,23 @@ export const AddCategoryController = async (request, response) => {
       data: saveCategory,
       success: true,
       error: false,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const getCategoryController = async (request, response) => {
+  try {
+    const data = await CategoryModel.find();
+    return response.json({
+      data: data,
+      error: false,
+      success: true,
     });
   } catch (error) {
     return response.status(500).json({
