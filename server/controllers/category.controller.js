@@ -47,7 +47,7 @@ export const AddCategoryController = async (request, response) => {
 
 export const getCategoryController = async (request, response) => {
   try {
-    const data = await CategoryModel.find();
+    const data = await CategoryModel.find().sort({ createdAt: -1 });
     return response.json({
       data: data,
       error: false,
@@ -64,10 +64,10 @@ export const getCategoryController = async (request, response) => {
 
 export const updateCategoryController = async (request, response) => {
   try {
-    const { categoryId, name, image } = request.body;
+    const { _id, name, image } = request.body;
     const update = await CategoryModel.updateOne(
       {
-        _id: categoryId,
+        _id: _id,
       },
       {
         name: name,
@@ -85,6 +85,45 @@ export const updateCategoryController = async (request, response) => {
       message: error.message || error,
       error: true,
       success: false,
+    });
+  }
+};
+
+export const deleteCategoryController = async (request, response) => {
+  try {
+    const { _id } = request.body;
+    const checkSubCategory = await SubCategoryModel.findOne({
+      category: {
+        $in: [_id],
+      },
+    }).countDocuments();
+
+    const checkProduct = await ProductModel.findOne({
+      category: {
+        $in: [_id],
+      },
+    }).countDocuments();
+    if (checkSubCategory > 0 || checkProduct > 0) {
+      return response.status(400).json({
+        message: "Category is already use can't delete",
+        error: true,
+        success: false,
+      });
+    }
+    const deleteCategory = await CategoryModel.deleteOne({
+      _id: _id,
+    });
+    return response.json({
+      message: "Delete Category successfully",
+      success: true,
+      error: false,
+      data: deleteCategory,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
     });
   }
 };
