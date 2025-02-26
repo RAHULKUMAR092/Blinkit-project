@@ -57,6 +57,19 @@ const SubCategoryPage = () => {
         }),
         columnHelper.accessor("category", {
             header: "Category",
+            cell: (({ row }) => {
+                return (
+                    <>
+                        {
+                            row.original.category.map((c, index) => {
+                                return (
+                                    <p key={c._id + "table"} className='shadow-md px-1 inline-block'>{c.name}</p>
+                                )
+                            })
+                        }
+                    </>
+                )
+            })
         })
     ]
 
