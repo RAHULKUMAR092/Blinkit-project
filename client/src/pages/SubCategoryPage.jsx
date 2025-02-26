@@ -6,6 +6,13 @@ import SummaryApi from '../common/SummaryApi';
 import DisplayTable from '../components/DisplayTable';
 import { createColumnHelper } from '@tanstack/react-table';
 import ViewImage from '../components/ViewImage';
+import { HiPencil } from "react-icons/hi";
+import { MdDelete } from "react-icons/md";
+import EditSubCategory from '../components/EditSubCategory';
+
+
+
+
 
 const SubCategoryPage = () => {
     const [opneAddSubCategory, setOpenAddSubCategory] = useState(false);
@@ -13,6 +20,10 @@ const SubCategoryPage = () => {
     const [loading, setLoading] = useState(false);
     const columnHelper = createColumnHelper()
     const [ImageURL, setImageURL] = useState("");
+    const [opneEdit, setOpenEdit] = useState(false);
+    const [editDate, setEditDate] = useState({
+        id: "",
+    });
 
 
     const fetchCategory = async () => {
@@ -70,6 +81,25 @@ const SubCategoryPage = () => {
                     </>
                 )
             })
+        }),
+        columnHelper.accessor("_id", {
+            header: "Action",
+            cell: ({ row }) => {
+                return (
+                    <div className='flex items-center justify-center gap-3'>
+                        <button onClick={() => {
+                            setOpenEdit(true)
+                            setEditDate(row.original)
+                        }}
+                            className='p-2 bg-green-100 rounded-full hover:text-green-600'>
+                            <HiPencil size={20} />
+                        </button>
+                        <button className='p-2 bg-red-100 rounded-full text-red-500 hover:text-red-600'>
+                            <MdDelete size={20} />
+                        </button>
+                    </div>
+                )
+            }
         })
     ]
 
@@ -95,6 +125,14 @@ const SubCategoryPage = () => {
             {
                 ImageURL &&
                 <ViewImage url={ImageURL} close={() => setImageURL("")} />
+            }
+            {
+                opneEdit &&
+                <EditSubCategory
+                    data={editDate}
+                    close={() => setOpenEdit(false)}
+                    fetchData={fetchCategory}
+                />
             }
         </section >
     )
