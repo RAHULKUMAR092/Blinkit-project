@@ -9,7 +9,7 @@ import AxiosToastError from '../utils/AxiosToastError';
 
 
 
-const UploadSubCategoryModel = ({ close }) => {
+const UploadSubCategoryModel = ({ close, fetchData }) => {
     const [subCategoryData, setSubCategoryData] = useState({
         name: "",
         image: "",
@@ -62,6 +62,9 @@ const UploadSubCategoryModel = ({ close }) => {
                 toast.success(responseData.message)
                 if (close) {
                     close()
+                }
+                if (fetchData) {
+                    fetchData()
                 }
             }
         } catch (error) {

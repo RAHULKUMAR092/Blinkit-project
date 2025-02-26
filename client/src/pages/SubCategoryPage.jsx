@@ -31,7 +31,7 @@ const SubCategoryPage = () => {
     const [openDeleteConfirmBox, setOpenDeleteConfirmBox] = useState(false);
 
 
-    const fetchCategory = async () => {
+    const fetchSubCategory = async () => {
         try {
             setLoading(true);
             const response = await Axios({
@@ -50,7 +50,7 @@ const SubCategoryPage = () => {
     }
 
     useEffect(() => {
-        fetchCategory();
+        fetchSubCategory();
     }, [])
     const column = [
         columnHelper.accessor('name', {
@@ -121,7 +121,7 @@ const SubCategoryPage = () => {
             const { data: responseData } = response
             if (responseData.success) {
                 toast.success(responseData.message)
-                fetchCategory()
+                fetchSubCategory()
                 setOpenDeleteConfirmBox(false)
                 setDeleteSubCategory({ _id: "" })
             }
@@ -158,7 +158,7 @@ const SubCategoryPage = () => {
                 <EditSubCategory
                     data={editDate}
                     close={() => setOpenEdit(false)}
-                    fetchData={fetchCategory}
+                    fetchData={fetchSubCategory}
                 />
             }
             {
