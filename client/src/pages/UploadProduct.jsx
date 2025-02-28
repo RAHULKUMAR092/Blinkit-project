@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaCloudUploadAlt } from "react-icons/fa";
 import uploadImage from '../utils/UploadImage';
 import Loading from "../components/Loading"
@@ -6,6 +6,10 @@ import { MdDelete } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { IoClose } from 'react-icons/io5';
 import AddFieldComponent from '../components/AddFieldComponent';
+import Axios from '../utils/Axios';
+import SummaryApi from '../common/SummaryApi';
+import AxiosToastError from '../utils/AxiosToastError';
+import successAlert from '../utils/SuccessAlert';
 
 
 const UploadProduct = () => {
@@ -95,9 +99,25 @@ const UploadProduct = () => {
         setOpneAddField(false)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        try {
+            const response = await Axios({
+                ...SummaryApi.createProduct,
+                data: data
+            })
+            const { data: responseData } = response;
+            if (responseData.success) {
+                successAlert(responseData.message)
+            }
+        } catch (error) {
+            AxiosToastError(error)
+        }
     }
+
+    useEffect(() => {
+        successAlert("Upload Successfully")
+    }, [])
 
     return (
         <section>
