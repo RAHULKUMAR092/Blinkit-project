@@ -109,15 +109,27 @@ const UploadProduct = () => {
             const { data: responseData } = response;
             if (responseData.success) {
                 successAlert(responseData.message)
+                setData({
+                    name: "",
+                    image: [],
+                    category: [],
+                    subCategory: [],
+                    unit: "",
+                    stock: "",
+                    price: "",
+                    discount: "",
+                    description: "",
+                    more_details: {},
+                })
             }
         } catch (error) {
             AxiosToastError(error)
         }
     }
 
-    useEffect(() => {
-        successAlert("Upload Successfully")
-    }, [])
+    // useEffect(() => {
+    //     successAlert("Upload Successfully")
+    // }, [])
 
     return (
         <section>
